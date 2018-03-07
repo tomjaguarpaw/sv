@@ -50,15 +50,11 @@ data Example =
 
 makeLenses ''Example
 
--- | This should just be '<>' of the 'Monoid' instance for 'Encode'
-(.<>) :: Encode a -> Encode a -> Encode a
-(.<>) = divide (\a -> (a, a))
-
 -- | Here we're defining an encoder for a 'Product' by using the
--- 'contramap' and '.<>' combinators.
+-- 'contramap' and '<>' combinators.
 productEnc :: Encode Product
 productEnc = contramap _p1 E.text
-             .<> contramap _p2 E.double
+             <> contramap _p2 E.double
 
 -- | Here we're defining an encoder for a 'Sum' using the 'choose' combinator.
 --
@@ -93,15 +89,15 @@ sumEnc = choose split E.int $ chosen E.double E.text
         Sum3 t -> Right (Right t)
 
 -- | 'exampleEnc' puts it all together. 'Example' is a product, so we
--- use 'contramap' and '.<>'.
+-- use 'contramap' and '<>'.
 exampleEnc :: Encode Example
 exampleEnc =
   contramap _e1 E.byteString
-  .<> contramap _e2 E.text
-  .<> contramap _e3 E.int
-  .<> contramap _e4 E.double
-  .<> contramap _e5 productEnc
-  .<> contramap _e6 sumEnc
+  <> contramap _e2 E.text
+  <> contramap _e3 E.int
+  <> contramap _e4 E.double
+  <> contramap _e5 productEnc
+  <> contramap _e6 sumEnc
 
 examples :: [Example]
 examples =
